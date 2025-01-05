@@ -82,7 +82,7 @@ int main() {
 
     PIDFunctions pid = PIDFunctions();
 
-    pid.driveStraight(12, distanceUnits::in, forward);
+    pid.driveStraight(24, distanceUnits::in, forward);
 
    
 

@@ -17,11 +17,11 @@ void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  ve
         Brain.Screen.setCursor(2,1);
         Brain.Screen.print("%f", convertDegreesToDistance(setPoint, vex::distanceUnits::in));
 
-        double headingError = initialHeading - BrainInertial.heading();
+        double headingError = initialHeading - BrainInertial.rotation();
         double headingOutput = headingError * 0.3;
 
-        double leftMotorSpeed = distanceOutput - headingOutput;
-        double rightMotorSpeed = distanceOutput + headingOutput;
+        double leftMotorSpeed = distanceOutput + headingOutput;
+        double rightMotorSpeed = distanceOutput - headingOutput;
 
 
         if(leftMotorSpeed > 0 && direction == forward) {
@@ -44,7 +44,8 @@ void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  ve
             RDMotor.spin(forward, -rightMotorSpeed, percent);
         }
 
-        if(Drivetrain.velocity(pct) < 0.00001 && Drivetrain.velocity(pct) > -0.00001) {
+        if(Drivetrain.velocity(pct) < 0.00001 && Drivetrain.velocity(pct) > -0.00001 && distancePID.atSetPoint()) {
+            wait(1, seconds);
             break;
         }
         
