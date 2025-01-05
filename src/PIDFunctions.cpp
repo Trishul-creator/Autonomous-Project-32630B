@@ -17,7 +17,7 @@ void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  ve
         Brain.Screen.setCursor(2,1);
         Brain.Screen.print("%f", convertDegreesToDistance(setPoint, vex::distanceUnits::in));
 
-        double headingError = initialHeading - BrainInertial.rotation();
+        double headingError = initialHeading - BrainInertial.heading();
         double headingOutput = headingError * 0.3;
 
         double leftMotorSpeed = distanceOutput - headingOutput;
