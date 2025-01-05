@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <fstream>
 #include <string.h>
 #include "RobotConfig.h"
 #include "vex.h"
@@ -59,6 +60,8 @@ void vexcodeInit() {
 
   // Initializing random seed.
   initializeRandomSeed(); 
+
+  
 }
 #pragma endregion
 /*----------------------------------------------------------------------------*/
@@ -80,6 +83,22 @@ int main() {
     PIDFunctions pid = PIDFunctions();
 
     pid.driveStraight(12, distanceUnits::in, forward);
+
+   printf("Times: ");
+    const auto& errorLog = pid.getPIDController().getErrorLog();
+    for (const auto& entry : errorLog) {
+        printf("%f, ", entry.first);
+    }
+    printf("\n");
+
+    // Print errors in another line
+    printf("Errors: ");
+    for (const auto& entry : errorLog) {
+        printf("%f, ", entry.second);
+    }
+    printf("\n");
+
+
 
     
 

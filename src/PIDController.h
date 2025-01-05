@@ -2,12 +2,14 @@
 #define PIDCONTROLLER_H
 #include "vex.h"
 #include "RobotConfig.h"
+#include <vector>
 
 class PIDController {
     public:
         // Constructor
         PIDController(double kP, double kI, double kD);
 
+        
         // Method to calculate the PID output 
         double calculate(double setpoint, double measuredValue);
 
@@ -18,6 +20,8 @@ class PIDController {
         double degreesToDistance(double degrees, vex::distanceUnits units);
 
         void reset();
+
+        const std::vector<std::pair<double, double>>& getErrorLog() const;
 
     private:
         // PID Constants
@@ -39,6 +43,12 @@ class PIDController {
 
         // PID Timer
         vex::timer pidTimer;
+
+        //Oscillation vector
+
+        std::vector<std::pair<double,double>> errorLog;
+        
+        
         
 };
 

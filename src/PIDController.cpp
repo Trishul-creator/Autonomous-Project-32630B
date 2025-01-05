@@ -31,11 +31,16 @@ double PIDController::calculate(double setpoint, double measuredValue) {
     }
 
     // set previous values to current values
+    errorLog.push_back({currentTime, error});
     previousError = error;
     previousTime = currentTime;
 
     return output;
 
+}
+
+const std::vector<std::pair<double, double>>& PIDController::getErrorLog() const {
+    return errorLog;
 }
 
 void PIDController::reset() {

@@ -1,7 +1,7 @@
 #include "PIDFunctions.h"
 using namespace vex;
 
-PIDFunctions::PIDFunctions() : distancePID(0.7, 0.0, 0.0) {}
+PIDFunctions::PIDFunctions() : distancePID(2, 0.0, 0.0) {}
 
 // Method to drive straight
 void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  vex::directionType direction) {
@@ -42,15 +42,13 @@ void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  ve
         } else if(rightMotorSpeed < 0 && direction == reverse) {
             RDMotor.spin(forward, -rightMotorSpeed, percent);
         }
-        Brain.Screen.setCursor(4,1);
-        Brain.Screen.print(distancePID.atSetPoint() ? "true" : "false");
-        if(distancePID.atSetPoint()) {
-            break;
-        } 
+        
+
         wait(10, msec);
         
         
     }
+    Drivetrain.stop(vex::brakeType::brake);
     Brain.Screen.setCursor(3,1);
     Brain.Screen.print("Done !!!!");
 }
@@ -61,7 +59,9 @@ void PIDFunctions::resetSensors() {
     BrainInertial.resetHeading();
     BrainInertial.resetRotation();
 }
-
+PIDController PIDFunctions::getPIDController() {
+    return distancePID;
+}
 double PIDFunctions::convertDistanceToDegrees(double distance, vex::distanceUnits units) {
             double wheelDiameter = 2.5;
             double wheelCircumference = wheelDiameter * M_PI;

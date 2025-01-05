@@ -13,6 +13,8 @@ class PIDFunctions {
         double convertDistanceToDegrees(double distance, vex::distanceUnits units);
         void resetSensors();    
         double convertDegreesToDistance(double distance, vex::distanceUnits units);
+        PIDController getPIDController();
+
     private:
         PIDController distancePID;
 };
