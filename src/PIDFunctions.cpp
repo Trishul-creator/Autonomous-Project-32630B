@@ -1,7 +1,7 @@
 #include "PIDFunctions.h"
 using namespace vex;
 
-PIDFunctions::PIDFunctions() : distancePID(2, 0.0, 0.0) {}
+PIDFunctions::PIDFunctions() : distancePID(0.185, 0.0032, 2.7) {}
 
 // Method to drive straight
 void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  vex::directionType direction) {
@@ -18,10 +18,11 @@ void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  ve
         Brain.Screen.print("%f", convertDegreesToDistance(setPoint, vex::distanceUnits::in));
 
         double headingError = initialHeading - BrainInertial.rotation();
-        double headingOutput = headingError * 0.0;
+        double headingOutput = headingError * 0.3;
 
-        double leftMotorSpeed = distanceOutput + headingOutput;
-        double rightMotorSpeed = distanceOutput - headingOutput;
+        double leftMotorSpeed = distanceOutput - headingOutput;
+        double rightMotorSpeed = distanceOutput + headingOutput;
+
 
         if(leftMotorSpeed > 0 && direction == forward) {
             LDMotor.spin(forward, leftMotorSpeed, percent);
@@ -42,6 +43,11 @@ void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  ve
         } else if(rightMotorSpeed < 0 && direction == reverse) {
             RDMotor.spin(forward, -rightMotorSpeed, percent);
         }
+
+        if(Drivetrain.velocity(pct) < 0.00001 && Drivetrain.velocity(pct) > -0.00001) {
+            break;
+        }
+        
         
 
         wait(10, msec);
@@ -53,15 +59,14 @@ void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  ve
     Brain.Screen.print("Done !!!!");
 }
 
+
 void PIDFunctions::resetSensors() {
     LDMotor.resetPosition();
     RDMotor.resetPosition();
     BrainInertial.resetHeading();
     BrainInertial.resetRotation();
 }
-PIDController PIDFunctions::getPIDController() {
-    return distancePID;
-}
+
 double PIDFunctions::convertDistanceToDegrees(double distance, vex::distanceUnits units) {
             double wheelDiameter = 2.5;
             double wheelCircumference = wheelDiameter * M_PI;

@@ -21,8 +21,13 @@ double PIDController::calculate(double setpoint, double measuredValue) {
 
     derivative = (error - previousError) / deltaTime; // Rate of change of error over time
 
+    Brain.Screen.setCursor(3,1);
+    Brain.Screen.print("%f",(kD * derivative));
+
     // output to send to the motor
     double output = (kP * error) + (kI * integral) + (kD * derivative);
+    Brain.Screen.setCursor(4,1);
+    Brain.Screen.print("%f", output);
 
     if(output > maxOutput) {
         output = maxOutput;
@@ -31,13 +36,14 @@ double PIDController::calculate(double setpoint, double measuredValue) {
     }
 
     // set previous values to current values
-    errorLog.push_back({currentTime, error});
     previousError = error;
     previousTime = currentTime;
 
     return output;
 
 }
+
+
 
 const std::vector<std::pair<double, double>>& PIDController::getErrorLog() const {
     return errorLog;
@@ -61,9 +67,9 @@ bool PIDController::atSetPoint() {
 }
 
 double PIDController::degreesToDistance(double degrees, vex::distanceUnits units) {
-    double wheelDiameter = 4.0; // Example wheel diameter in inches
+    double wheelDiameter = 2.5; // Example wheel diameter in inches
     double wheelCircumference = wheelDiameter * M_PI;
-    double gearRatio = 1.0; // Example gear ratio
+    double gearRatio = 2.5; // Example gear ratio
 
     double distanceInInches = (degrees / 360.0) * wheelCircumference / gearRatio;
 
