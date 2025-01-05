@@ -1,0 +1,19 @@
+{
+	"extension": {
+		"version": "0.6.1",
+		"json": 2
+	},
+	"project": {
+		"name": "Autonomous-Project-32630B",
+		"description": "The  autonomous project for our team !",
+		"creationDate": "1/4/2025, 2:50:18 PM",
+		"platform": "IQ2",
+		"language": "cpp",
+		"slot": 1,
+		"sdkVersion": "IQ2_20231003_10_00_00",
+		"cpp": {
+			"includePath": [],
+			"printf_float": false
+		}
+	}
+}
