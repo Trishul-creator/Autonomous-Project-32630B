@@ -1,7 +1,7 @@
 #include "PIDFunctions.h"
 using namespace vex;
 
-PIDFunctions::PIDFunctions() : distancePID(0.5, 0.0, 0.0) {}
+PIDFunctions::PIDFunctions() : distancePID(0.7, 0.0, 0.0) {}
 
 // Method to drive straight
 void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  vex::directionType direction) {
@@ -42,14 +42,17 @@ void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  ve
         } else if(rightMotorSpeed < 0 && direction == reverse) {
             RDMotor.spin(forward, -rightMotorSpeed, percent);
         }
-
-        if(Drivetrain.velocity(pct) < 5 && distancePID.atSetPoint()) {
+        Brain.Screen.setCursor(4,1);
+        Brain.Screen.print(distancePID.atSetPoint() ? "true" : "false");
+        if(distancePID.atSetPoint()) {
             break;
         } 
         wait(10, msec);
         
         
     }
+    Brain.Screen.setCursor(3,1);
+    Brain.Screen.print("Done !!!!");
 }
 
 void PIDFunctions::resetSensors() {

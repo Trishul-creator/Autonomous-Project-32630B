@@ -48,7 +48,7 @@ void PIDController::reset() {
 }
 
 bool PIDController::atSetPoint() {
-    if(error < 0.5 && error > -0.5) {
+    if(degreesToDistance(error, vex::distanceUnits::in)  < 0.2 && degreesToDistance(error, vex::distanceUnits::in) > -0.2) {
         return true;
     } else {
         return false;
