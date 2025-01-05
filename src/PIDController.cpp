@@ -1,7 +1,7 @@
 #include "PIDController.h"
 
 PIDController::PIDController(double kP, double kI, double kD)
-    : kP(kP), kI(kI), kD(kD), error(0), integral(0), derivative(0), previousError(0), previousTime(0), maxOutput(100), minOutput(0), maxIntegral(300){
+    : kP(kP), kI(kI), kD(kD), error(0), integral(0), derivative(0), previousError(0), previousTime(0), maxOutput(100), minOutput(-100), maxIntegral(300){
         pidTimer.clear();
 }
 
@@ -25,9 +25,9 @@ double PIDController::calculate(double setpoint, double measuredValue) {
     double output = (kP * error) + (kI * integral) + (kD * derivative);
 
     if(output > maxOutput) {
-        output = 100;
+        output = maxOutput;
     } else if(output < minOutput) {
-        output = 0;
+        output = minOutput;
     }
 
     // set previous values to current values

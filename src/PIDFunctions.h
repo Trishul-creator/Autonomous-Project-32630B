@@ -9,7 +9,7 @@ class PIDFunctions {
     public:
         PIDFunctions();
         // Method to drive straight
-        void driveStraight(double targetDistance, vex::distanceUnits units,  double maxSpeed);
+        void driveStraight(double targetDistance, vex::distanceUnits units, vex::directionType direction);
         double convertDistanceToDegrees(double distance, vex::distanceUnits units);
         void resetSensors();    
         double convertDegreesToDistance(double distance, vex::distanceUnits units);

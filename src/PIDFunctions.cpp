@@ -4,7 +4,7 @@ using namespace vex;
 PIDFunctions::PIDFunctions() : distancePID(0.5, 0.0, 0.0) {}
 
 // Method to drive straight
-void PIDFunctions::driveStraight(double targetDistance, distanceUnits units, double maxSpeed) {
+void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  vex::directionType direction) {
     // Reset the PID Controller
     resetSensors();
     distancePID.reset();
@@ -23,8 +23,25 @@ void PIDFunctions::driveStraight(double targetDistance, distanceUnits units, dou
         double leftMotorSpeed = distanceOutput + headingOutput;
         double rightMotorSpeed = distanceOutput - headingOutput;
 
-        LDMotor.spin(forward, leftMotorSpeed, percent);
-        RDMotor.spin(forward, rightMotorSpeed, percent);
+        if(leftMotorSpeed > 0 && direction == forward) {
+            LDMotor.spin(forward, leftMotorSpeed, percent);
+        } else if(leftMotorSpeed < 0 && direction == forward) {
+            LDMotor.spin(reverse, -leftMotorSpeed, percent);
+        } else if(leftMotorSpeed > 0 && direction == reverse) {
+            LDMotor.spin(reverse, leftMotorSpeed, percent);
+        } else if(leftMotorSpeed < 0 && direction == reverse) {
+            LDMotor.spin(forward, -leftMotorSpeed, percent);
+        }
+
+         if(rightMotorSpeed > 0 && direction == forward) {
+            RDMotor.spin(forward, rightMotorSpeed, percent);
+        } else if(rightMotorSpeed < 0 && direction == forward) {
+            RDMotor.spin(reverse, -rightMotorSpeed, percent);
+        } else if(rightMotorSpeed > 0 && direction == reverse) {
+            RDMotor.spin(reverse, rightMotorSpeed, percent);
+        } else if(rightMotorSpeed < 0 && direction == reverse) {
+            RDMotor.spin(forward, -rightMotorSpeed, percent);
+        }
 
         if(Drivetrain.velocity(pct) < 5 && distancePID.atSetPoint()) {
             break;
