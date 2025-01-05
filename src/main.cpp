@@ -84,19 +84,7 @@ int main() {
 
     pid.driveStraight(12, distanceUnits::in, forward);
 
-   printf("Times: ");
-    const auto& errorLog = pid.getPIDController().getErrorLog();
-    for (const auto& entry : errorLog) {
-        printf("%f, ", entry.first);
-    }
-    printf("\n");
-
-    // Print errors in another line
-    printf("Errors: ");
-    for (const auto& entry : errorLog) {
-        printf("%f, ", entry.second);
-    }
-    printf("\n");
+   
 
 
 
