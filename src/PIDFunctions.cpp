@@ -23,6 +23,18 @@ void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  ve
         double leftMotorSpeed = distanceOutput + headingOutput;
         double rightMotorSpeed = distanceOutput - headingOutput;
 
+        if(leftMotorSpeed > 80) {
+            leftMotorSpeed = 80;
+        } else if(leftMotorSpeed < -80) {
+            leftMotorSpeed = -80;
+        }
+
+        if(rightMotorSpeed > 80) {
+            rightMotorSpeed = 80;
+        } else if(rightMotorSpeed < -80) {
+            rightMotorSpeed = -80;
+        }
+
 
         if(leftMotorSpeed > 0 && direction == forward) {
             LDMotor.spin(forward, leftMotorSpeed, percent);

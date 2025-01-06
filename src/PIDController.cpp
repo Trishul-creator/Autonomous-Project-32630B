@@ -1,7 +1,7 @@
 #include "PIDController.h"
 
 PIDController::PIDController(double kP, double kI, double kD)
-    : kP(kP), kI(kI), kD(kD), error(0), integral(0), derivative(0), previousError(0), previousTime(0), maxOutput(100), minOutput(-100), maxIntegral(300){
+    : kP(kP), kI(kI), kD(kD), error(0), integral(0), derivative(0), previousError(0), previousTime(0), maxOutput(80), minOutput(-80), maxIntegral(300){
         pidTimer.clear();
 }
 
