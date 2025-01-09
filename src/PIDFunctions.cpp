@@ -1,7 +1,7 @@
 #include "PIDFunctions.h"
 using namespace vex;
 
-PIDFunctions::PIDFunctions() : distancePID(0.185, 0.0032, 2.7) {}
+PIDFunctions::PIDFunctions() : distancePID(0.185, 0.0031, 2.81) {}
 
 // Method to drive straight
 void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  vex::directionType direction) {
@@ -10,6 +10,8 @@ void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  ve
     distancePID.reset();
     double setPoint = convertDistanceToDegrees(targetDistance, units);
     double initialHeading = BrainInertial.heading();
+    prevHeadingError = 0;
+    
 
     while(true) {
         double averagePosiion = (LDMotor.position(degrees) + RDMotor.position(degrees)) / 2;
@@ -18,22 +20,25 @@ void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  ve
         Brain.Screen.print("%f", convertDegreesToDistance(setPoint, vex::distanceUnits::in));
 
         double headingError = initialHeading - BrainInertial.rotation();
-        double headingOutput = headingError * 0.3;
-
-        double leftMotorSpeed = distanceOutput + headingOutput;
-        double rightMotorSpeed = distanceOutput - headingOutput;
-
-        if(leftMotorSpeed > 80) {
-            leftMotorSpeed = 80;
-        } else if(leftMotorSpeed < -80) {
-            leftMotorSpeed = -80;
+        Brain.Screen.setCursor(5,1);
+        Brain.Screen.print("%f", headingError);
+        double headingDerivative = headingError - prevHeadingError;
+        double headingIntegral;
+        headingIntegral += headingError;
+        if(headingIntegral > 3) {
+            headingIntegral = 3;
         }
+        double headingOutput = (headingError * 1.671) + (headingDerivative * 14) + (headingIntegral * 0.00000000001);
 
-        if(rightMotorSpeed > 80) {
-            rightMotorSpeed = 80;
-        } else if(rightMotorSpeed < -80) {
-            rightMotorSpeed = -80;
+
+        double leftMotorSpeed = distanceOutput - headingOutput;
+        if(distancePID.inIntegralRange()) {
+            leftMotorSpeed = distanceOutput - headingOutput + 3.48;
         }
+        double rightMotorSpeed = distanceOutput + headingOutput;
+
+        prevHeadingError = headingError;
+        
 
 
         if(leftMotorSpeed > 0 && direction == forward) {
@@ -56,18 +61,17 @@ void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  ve
             RDMotor.spin(forward, -rightMotorSpeed, percent);
         }
 
-        if(Drivetrain.velocity(pct) < 0.00001 && Drivetrain.velocity(pct) > -0.00001 && distancePID.atSetPoint()) {
-            wait(1, seconds);
+        if(Drivetrain.velocity(pct) < 0.00001 && Drivetrain.velocity(pct) > -0.00001 && distancePID.atSetPoint() && headingError < 1.5 && headingError > -1.5) {
+            Drivetrain.stop(vex::brakeType::brake);
             break;
         }
-        
         
 
         wait(10, msec);
         
         
     }
-    Drivetrain.stop(vex::brakeType::brake);
+    
     Brain.Screen.setCursor(3,1);
     Brain.Screen.print("Done !!!!");
 }
@@ -88,7 +92,7 @@ double PIDFunctions::convertDistanceToDegrees(double distance, vex::distanceUnit
             if(units == vex::distanceUnits::mm) {
                 distance /= 25.4;
             }
-            double distanceInDegrees = (360 / wheelCircumference) * distance * gearRatio;
+            double distanceInDegrees = distance / (wheelCircumference * 360 * gearRatio);
             return distanceInDegrees;
 
         }
@@ -97,7 +101,7 @@ double PIDFunctions::convertDegreesToDistance(double degrees, vex::distanceUnits
     double wheelCircumference = wheelDiameter * M_PI;
     double gearRatio = 2.5; // Example gear ratio
 
-    double distanceInInches = (degrees / 360.0) * wheelCircumference / gearRatio;
+    double distanceInInches = (degrees / 360) * wheelCircumference * gearRatio;
 
     if (units == vex::distanceUnits::mm) {
         distanceInInches *= 25.4; // Convert inches to mm

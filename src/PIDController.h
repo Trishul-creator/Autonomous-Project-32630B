@@ -16,6 +16,10 @@ class PIDController {
         // Calculate when pid should stop
         bool atSetPoint();
 
+        bool inIntegralRange();
+
+
+
 
         double degreesToDistance(double degrees, vex::distanceUnits units);
 
@@ -35,6 +39,9 @@ class PIDController {
         double derivative;
         double previousError;
         double previousTime;
+
+        //Setpoint
+        double setpoint;
 
         //Limits
         double maxOutput;

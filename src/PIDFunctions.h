@@ -18,6 +18,7 @@ class PIDFunctions {
 
     private:
         PIDController distancePID;
+        double prevHeadingError;
 };
 
 #endif // PIDFUNCTIONS_H
