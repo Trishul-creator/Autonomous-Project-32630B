@@ -28,28 +28,49 @@ class PIDController {
         const std::vector<std::pair<double, double>>& getErrorLog() const;
 
     private:
-        // PID Constants
+        // PID Drive Constants
         double kP;
         double kI;
         double kD;
 
-        // PID Variables
+        // PID Turn Constants
+        double turnkP;
+        double turnkD;
+        double turnkI;
+
+        // PID Drive  Variables
         double error;
         double integral;
         double derivative;
         double previousError;
         double previousTime;
 
+        // PID Turn Variables
+        double turnError;
+        double turnIntegral;
+        double turnDerivative;
+        double turnPreviousError;
+        double turnPreviousTime;
+
         //Setpoint
         double setpoint;
+
+        //Turn setpoint
+        double turnSetPoint;
 
         //Limits
         double maxOutput;
         double minOutput;
         double maxIntegral;
 
-        // PID Timer
+        
+
+        // PID Drive  Timer
         vex::timer pidTimer;
+
+        // PID Turn Timeer;
+        vex::timer turnTimer;
+
 
         //Oscillation vector
 

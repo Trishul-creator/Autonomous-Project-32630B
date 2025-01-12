@@ -32,9 +32,6 @@ void PIDFunctions::driveStraight(double targetDistance, distanceUnits units,  ve
 
 
         double leftMotorSpeed = distanceOutput - headingOutput;
-        if(distancePID.inIntegralRange()) {
-            leftMotorSpeed = distanceOutput - headingOutput + 3.48;
-        }
         double rightMotorSpeed = distanceOutput + headingOutput;
 
         prevHeadingError = headingError;
