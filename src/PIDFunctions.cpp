@@ -84,21 +84,21 @@ void PIDFunctions::resetSensors() {
 double PIDFunctions::convertDistanceToDegrees(double distance, vex::distanceUnits units) {
             double wheelDiameter = 2.5;
             double wheelCircumference = wheelDiameter * M_PI;
-            double gearRatio = 2.5;
+            double gearRatio = (2/5);
             
             if(units == vex::distanceUnits::mm) {
                 distance /= 25.4;
             }
-            double distanceInDegrees = distance / (wheelCircumference * 360 * gearRatio);
+            double distanceInDegrees = (360 / wheelCircumference) * distance * gearRatio;
             return distanceInDegrees;
 
         }
 double PIDFunctions::convertDegreesToDistance(double degrees, vex::distanceUnits units) {
     double wheelDiameter = 2.5; // Example wheel diameter in inches
     double wheelCircumference = wheelDiameter * M_PI;
-    double gearRatio = 2.5; // Example gear ratio
+    double gearRatio = (2/5); // Example gear ratio
 
-    double distanceInInches = (degrees / 360) * wheelCircumference * gearRatio;
+    double distanceInInches = (degrees / 360.0) * wheelCircumference / gearRatio;
 
     if (units == vex::distanceUnits::mm) {
         distanceInInches *= 25.4; // Convert inches to mm

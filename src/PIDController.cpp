@@ -1,7 +1,7 @@
 #include "PIDController.h"
 
 PIDController::PIDController(double kP, double kI, double kD)
-    : kP(kP), kI(kI), kD(kD), error(0), integral(0), derivative(0), previousError(0), previousTime(0), maxOutput(70), minOutput(-70), maxIntegral(300){
+    : kP(kP), kI(kI), kD(kD), error(0), integral(0), derivative(0), previousError(0), previousTime(0), maxOutput(80), minOutput(-80), maxIntegral(300){
         pidTimer.clear();
 }
 
@@ -81,7 +81,7 @@ double PIDController::degreesToDistance(double degrees, vex::distanceUnits units
     double wheelCircumference = wheelDiameter * M_PI;
     double gearRatio = 2.5; // Example gear ratio
 
-    double distanceInInches = (degrees/360) * wheelCircumference * gearRatio;
+    double distanceInInches = (degrees / 360.0) * wheelCircumference / gearRatio;
 
     if (units == vex::distanceUnits::mm) {
         distanceInInches *= 25.4; // Convert inches to mm
